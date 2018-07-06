@@ -156,11 +156,11 @@ public class ContactsProvider {
                 }
             }
         }
-        
+
         if(matchingContacts.values().size() > 0) {
             return matchingContacts.values().iterator().next().toMap();
         }
-        
+
        return null;
     }
 
@@ -327,37 +327,38 @@ public class ContactsProvider {
                 contact.department = cursor.getString(cursor.getColumnIndex(Organization.DEPARTMENT));
             } else if (mimeType.equals(StructuredPostal.CONTENT_ITEM_TYPE)) {
                 contact.postalAddresses.add(new Contact.PostalAddressItem(cursor));
-            } else if (mimeType.equals(Event.CONTENT_ITEM_TYPE)) {
-                int eventType = cursor.getInt(cursor.getColumnIndex(Event.TYPE));
-                if (eventType == Event.TYPE_BIRTHDAY) {
-                    try {
-                        String birthday = cursor.getString(cursor.getColumnIndex(Event.START_DATE)).replace("--", "");
-                        String[] yearMonthDay = birthday.split("-");
-                        List<String> yearMonthDayList = Arrays.asList(yearMonthDay);
-
-                        if (yearMonthDayList.size() == 2) {
-                            // birthday is formatted "12-31"
-                            int month = Integer.parseInt(yearMonthDayList.get(0));
-                            int day = Integer.parseInt(yearMonthDayList.get(1));
-                            if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-                                contact.birthday = new Contact.Birthday(month, day);
-                            }
-                        } else if (yearMonthDayList.size() == 3) {
-                            // birthday is formatted "1986-12-31"
-                            int year = Integer.parseInt(yearMonthDayList.get(0));
-                            int month = Integer.parseInt(yearMonthDayList.get(1));
-                            int day = Integer.parseInt(yearMonthDayList.get(2));
-                            if (year > 0 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-                                contact.birthday = new Contact.Birthday(year, month, day);
-                            }
-                        }
-                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                        // whoops, birthday isn't in the format we expect
-                        Log.w("ContactsProvider", e.toString());
-
-                    }
-                }
             }
+            //  else if (mimeType.equals(Event.CONTENT_ITEM_TYPE)) {
+            //     int eventType = cursor.getInt(cursor.getColumnIndex(Event.TYPE));
+            //     if (eventType == Event.TYPE_BIRTHDAY) {
+            //         try {
+            //             String birthday = cursor.getString(cursor.getColumnIndex(Event.START_DATE)).replace("--", "");
+            //             String[] yearMonthDay = birthday.split("-");
+            //             List<String> yearMonthDayList = Arrays.asList(yearMonthDay);
+            //
+            //             if (yearMonthDayList.size() == 2) {
+            //                 // birthday is formatted "12-31"
+            //                 int month = Integer.parseInt(yearMonthDayList.get(0));
+            //                 int day = Integer.parseInt(yearMonthDayList.get(1));
+            //                 if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+            //                     contact.birthday = new Contact.Birthday(month, day);
+            //                 }
+            //             } else if (yearMonthDayList.size() == 3) {
+            //                 // birthday is formatted "1986-12-31"
+            //                 int year = Integer.parseInt(yearMonthDayList.get(0));
+            //                 int month = Integer.parseInt(yearMonthDayList.get(1));
+            //                 int day = Integer.parseInt(yearMonthDayList.get(2));
+            //                 if (year > 0 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+            //                     contact.birthday = new Contact.Birthday(year, month, day);
+            //                 }
+            //             }
+            //         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            //             // whoops, birthday isn't in the format we expect
+            //             Log.w("ContactsProvider", e.toString());
+            //
+            //         }
+            //     }
+            // }
         }
 
         return map;
